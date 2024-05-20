@@ -1,6 +1,14 @@
 import os
 
-__global_repo_dir = None
+def set_repo(repo_dir: str):
+    validate_repo(repo_dir)
+    global __global_repo_dir
+    __global_repo_dir = repo_dir
+    
+def get_repo():
+    if '__global_repo_dir' not in globals():
+        return None
+    return __global_repo_dir
 
 def validate_repo(repository: str, silent: bool = False):
     if os.path.exists(repository):
@@ -11,14 +19,6 @@ def validate_repo(repository: str, silent: bool = False):
     else:
         return False
         
-def get_repo():
-    return __global_repo_dir
-
-def set_repo(repo_dir: str):
-    validate_repo(repo_dir)
-    global __global_repo_dir
-    __global_repo_dir = repo_dir
-
 def register_command(func):
     def wrapper(*args, **kwargs):
         repo_supplied = 'repository' in kwargs
